@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Control Citas - Agendar</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="app.css">
+  <style>
+    /* small tweak so sidebar links look like the rest */
+    .list-group-item a { text-decoration: none; color: inherit; display: block; width:100%; }
+  </style>
+</head>
+<body class="bg-primary">
+  <div class="container py-5">
+    <div class="card shadow-lg border-0 overflow-hidden">
+      <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-md-3 bg-white p-4">
+          <h3 class="fw-bold">Administrador</h3>
+          <p class="text-muted small">Panel de citas</p>
+          <ul class="list-group">
+            <li class="list-group-item active" id="navCitas">
+              <a href="#" style="text-decoration:none;color:inherit;display:block;">Citas</a>
+            </li>
+
+            <!-- NUEVO: Personas (abre persons view) -->
+            <li class="list-group-item">
+              <a href="/personas">Personas</a>
+            </li>
+
+            <!-- Mantengo Pacientes y el resto -->
+            <li class="list-group-item">
+              <a href="#" id="navPacientes" style="text-decoration:none;color:inherit;display:block;">Pacientes</a>
+            </li>
+            <li class="list-group-item">
+              <a href="/doctores">Doctores</a>
+            </li>
+            <li class="list-group-item">
+              <a href="/historial">Historial</a>
+            </li>
+            <li class="list-group-item">
+              <a href="/usuarios">Usuarios</a>
+            </li>
+          </ul>
+          <div class="mt-4">
+            <button id="btnNuevoPaciente" class="btn btn-outline-primary w-100 mb-2">Nuevo Paciente</button>
+            <button id="btnNuevoDoctor" class="btn btn-outline-secondary w-100 mb-2">Nuevo Doctor</button>
+            <button id="btnCerrarSesion" class="btn btn-outline-danger w-100 mt-3">Cerrar Sesión</button>
+          </div>
+        </div>
+
+        <!-- Main -->
+        <div class="col-md-9 p-4 bg-light">
+          <!-- VISTA CITAS -->
+          <div id="vistaCitas">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h2 class="mb-0">Agendar una Cita</h2>
+              <small class="text-muted">Sistema control_citas</small>
+            </div>
+
+            <div class="row">
+              <!-- Formulario agendar -->
+              <div class="col-lg-5">
+                <div class="card mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title">Nuevo / Editar Cita</h5>
+                    <form id="formCita">
+                      <input type="hidden" id="id_cita">
+                      <div class="mb-2">
+                        <label class="form-label">Paciente</label>
+                        <select id="selectPaciente" class="form-select" required>
+                          <option value="">Cargando pacientes...</option>
+                        </select>
+                      </div>
+                      <div class="mb-2">
+                        <label class="form-label">Doctor</label>
+                        <select id="selectDoctor" class="form-select" required>
+                          <option value="">Cargando doctores...</option>
+                        </select>
+                      </div>
+                      <div class="row gx-2">
+                        <div class="col-6 mb-2">
+                          <label class="form-label">Fecha</label>
+                          <input type="date" id="fecha" class="form-control" required>
+                        </div>
+                        <div class="col-6 mb-2">
+                          <label class="form-label">Hora</label>
+                          <input type="time" id="hora" class="form-control" required>
+                        </div>
+                      </div>
+                      <div class="mb-2">
+                        <label class="form-label">Motivo</label>
+                        <textarea id="motivo" class="form-control" rows="3"></textarea>
+                      </div>
+                      <div class="d-flex gap-2">
+                        <button id="btnGuardarCita" type="button" class="btn btn-success">Guardar Cita</button>
+                        <button id="btnCancelarCita" type="button" class="btn btn-outline-secondary">Cancelar</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="card-body small text-muted">
+                    Consejo: selecciona paciente y doctor antes de elegir fecha/hora.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tabla de citas -->
+              <div class="col-lg-7">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                      <h5 class="card-title mb-0">Próximas citas</h5>
+                      <button id="btnRefrescarCitas" class="btn btn-sm btn-outline-primary">Refrescar</button>
+                    </div>
+                    <div class="table-responsive mt-2">
+                      <table class="table table-striped" id="tablaCitas">
+                        <thead class="table-light">
+                          <tr>
+                            <th>#</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Paciente</th>
+                            <th>Doctor</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- row -->
+          </div>
+
+          <!-- VISTA PACIENTES -->
+          <div id="vistaPacientes" style="display:none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h2 class="mb-0">Pacientes</h2>
+              <small class="text-muted">Gestiona la tabla Pacientes</small>
+            </div>
+
+            <div class="row">
+              <!-- Formulario pacientes -->
+              <div class="col-lg-5">
+                <div class="card mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title">Agregar / Editar Paciente</h5>
+                    <input type="hidden" id="edit_id_paciente">
+                    <div class="mb-2">
+                      <label class="form-label">Persona</label>
+                      <select id="selectPersonaPaciente" class="form-select" required>
+                        <option value="">Cargando personas...</option>
+                      </select>
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label">Tipo de Sangre</label>
+                      <input id="tipo_sangre" class="form-control" placeholder="Ej: O+, A-, etc.">
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label">Alergias</label>
+                      <textarea id="alergias" class="form-control" rows="3" placeholder="Describa las alergias del paciente"></textarea>
+                    </div>
+                    <div class="d-flex gap-2">
+                      <button id="btnGuardarPaciente" type="button" class="btn btn-success">Guardar</button>
+                      <button id="btnCancelarPaciente" type="button" class="btn btn-outline-secondary">Cancelar</button>
+                      <button id="btnRefrescarPacientes" type="button" class="btn btn-outline-primary">Refrescar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tabla de pacientes -->
+              <div class="col-lg-7">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title mb-0">Lista de Pacientes</h5>
+                    <div class="table-responsive mt-2">
+                      <table class="table table-striped" id="tablaPacientes">
+                        <thead class="table-light">
+                          <tr>
+                            <th>#</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>DNI</th>
+                            <th>Tipo Sangre</th>
+                            <th>Alergias</th>
+                            <th>Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- row -->
+          </div>
+        </div> <!-- main -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
