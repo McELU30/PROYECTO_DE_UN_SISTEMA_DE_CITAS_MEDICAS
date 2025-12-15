@@ -4,19 +4,37 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Control Citas - Agendar</title>
+  <link rel="icon" type="image/svg+xml" href="logo-control-citas.svg">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="app.css">
   <style>
-    /* small tweak so sidebar links look like the rest */
-    .list-group-item a { text-decoration: none; color: inherit; display: block; width:100%; }
+    body { background:#2e6fb7; }
+    .card-main { border-radius:12px; overflow:hidden; }
+    .sidebar { background:#111216; color:#fff; min-height:520px; padding:24px; }
+    .sidebar .list-group-item { background:transparent; color:#ddd; border:none; }
+    .sidebar .list-group-item.active { background:#0d6efd; color:#fff; }
+    .sidebar .list-group-item a { text-decoration:none; color:inherit; display:block; width:100%; }
+    .content { background:#0f1011; color:#ddd; padding:28px; min-height:520px; }
+    .content .card { background:#121212; border:none; }
+    .content .card-title,
+    .content h2,
+    .content h5 { color:#f5f5f5; }
+    .content .form-label { color:#e0e0e0; }
+    .content .form-control,
+    .content .form-select,
+    .content textarea { background:#161718; color:#ddd; border:1px solid rgba(255,255,255,0.08); }
+    .content .table { color:#ddd; }
+    .content thead.table-light { background:rgba(255,255,255,0.05); color:#cfcfcf; }
+    .btn-primary { background:#0d6efd; border-color:#0d6efd; }
+    .btn-success { background:#20c997; border-color:#20c997; }
   </style>
 </head>
 <body class="bg-primary">
   <div class="container py-5">
-    <div class="card shadow-lg border-0 overflow-hidden">
+    <div class="card card-main shadow-lg">
       <div class="row g-0">
         <!-- Sidebar -->
-        <div class="col-md-3 bg-white p-4">
+        <div class="col-md-3 sidebar">
           <h3 class="fw-bold">Administrador</h3>
           <p class="text-muted small">Panel de citas</p>
           <ul class="list-group">
@@ -51,7 +69,7 @@
         </div>
 
         <!-- Main -->
-        <div class="col-md-9 p-4 bg-light">
+        <div class="col-md-9 content">
           <!-- VISTA CITAS -->
           <div id="vistaCitas">
             <div class="d-flex justify-content-between align-items-center mb-3">

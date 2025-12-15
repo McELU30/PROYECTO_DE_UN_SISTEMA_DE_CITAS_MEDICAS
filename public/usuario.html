@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel Usuario - Control de Citas</title>
+  <link rel="icon" type="image/svg+xml" href="logo-control-citas.svg">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body class="bg-primary">
+  <div class="container py-5">
+    <div class="card shadow-lg border-0 overflow-hidden">
+      <div class="row g-0">
+        <!-- Sidebar simple -->
+        <div class="col-md-3 bg-white p-4">
+          <h3 class="fw-bold">Portal Usuario</h3>
+          <p class="text-muted small">Gestiona tus citas</p>
+          <div class="mb-3">
+            <div class="small text-muted">Usuario:</div>
+            <div id="lblUsuario" class="fw-semibold">-</div>
+            <div class="small text-muted mt-2">Rol:</div>
+            <div id="lblRol" class="fw-semibold">-</div>
+          </div>
+          <div class="d-grid gap-2">
+            <button id="btnRefrescarCitasUser" class="btn btn-outline-primary">Refrescar</button>
+            <button id="btnCerrarSesionUser" class="btn btn-outline-danger">Cerrar Sesión</button>
+          </div>
+          <div class="alert alert-info mt-3 mb-0 small">
+            Solo podrás administrar tus propias citas. Si no tienes un registro de paciente, selecciona uno en el formulario.
+          </div>
+        </div>
+
+        <!-- Contenido -->
+        <div class="col-md-9 p-4 bg-light">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h2 class="mb-0">Mis Citas</h2>
+              <small class="text-muted">Agenda y revisa tus próximas atenciones</small>
+            </div>
+            <span class="badge text-bg-secondary" id="lblPacienteInfo">Paciente no vinculado</span>
+          </div>
+
+          <div class="row">
+            <!-- Formulario -->
+            <div class="col-lg-5">
+              <div class="card mb-3">
+                <div class="card-body">
+                  <h5 class="card-title">Solicitar nueva cita</h5>
+                  <div class="mb-2">
+                    <label class="form-label">Paciente</label>
+                    <select id="selectPacienteUser" class="form-select">
+                      <option value="">Cargando pacientes...</option>
+                    </select>
+                    <div class="form-text">Si tu usuario está vinculado, se seleccionará automáticamente.</div>
+                  </div>
+                  <div class="mb-2">
+                    <label class="form-label">Doctor</label>
+                    <select id="selectDoctorUser" class="form-select">
+                      <option value="">Cargando doctores...</option>
+                    </select>
+                  </div>
+                  <div class="row gx-2">
+                    <div class="col-6 mb-2">
+                      <label class="form-label">Fecha</label>
+                      <input type="date" id="fechaUser" class="form-control">
+                    </div>
+                    <div class="col-6 mb-2">
+                      <label class="form-label">Hora</label>
+                      <input type="time" id="horaUser" class="form-control">
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Motivo</label>
+                    <textarea id="motivoUser" class="form-control" rows="3" placeholder="Motivo de la consulta"></textarea>
+                  </div>
+                  <div class="d-grid">
+                    <button id="btnCrearCitaUser" class="btn btn-success">Crear cita</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabla -->
+            <div class="col-lg-7">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="card-title mb-0">Próximas citas</h5>
+                    <button id="btnRefrescarTablaUser" class="btn btn-sm btn-outline-primary">Refrescar</button>
+                  </div>
+                  <div class="table-responsive mt-2">
+                    <table class="table table-striped" id="tablaCitasUsuario">
+                      <thead class="table-light">
+                        <tr>
+                          <th>#</th>
+                          <th>Fecha</th>
+                          <th>Hora</th>
+                          <th>Paciente</th>
+                          <th>Doctor</th>
+                          <th>Estado</th>
+                          <th>Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- row -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="usuario.js"></script>
+</body>
+</html>
+

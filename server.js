@@ -55,6 +55,11 @@ app.get("/doctores", requiereAutenticacion, (req, res) => {
   res.sendFile(path.join(__dirname, "public/doctores.html"));
 });
 
+// Ruta vista usuario (rol general/paciente)
+app.get("/usuario", requiereAutenticacion, (req, res) => {
+  res.sendFile(path.join(__dirname, "public/usuario.html"));
+});
+
 // Ruta historial: requiere autenticación
 app.get("/historial", requiereAutenticacion, (req, res) => {
   res.sendFile(path.join(__dirname, "public/historial.html"));
@@ -599,10 +604,13 @@ app.post("/api/login", async (req, res) => {
       return res.status(401).json({ error: "Usuario o contraseña incorrectos" });
     }
 
-    // Crear sesión
+    // Crear sesión con datos básicos del usuario
     req.session.userId = user.id_usuario;
     req.session.usuario = user.usuario;
     req.session.rol = user.rol;
+    req.session.id_persona = user.id_persona || null;
+    req.session.nombres = user.nombres || null;
+    req.session.apellidos = user.apellidos || null;
 
     res.json({
       ok: true,
@@ -629,6 +637,9 @@ app.get("/api/auth-check", (req, res) => {
         id_usuario: req.session.userId,
         usuario: req.session.usuario,
         rol: req.session.rol,
+        id_persona: req.session.id_persona || null,
+        nombres: req.session.nombres || null,
+        apellidos: req.session.apellidos || null,
       },
     });
   } else {
